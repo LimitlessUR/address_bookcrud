@@ -2,26 +2,26 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Books</h1>
+        <h1>Addresss</h1>
         <hr><br><br>
         <alert :message=message v-if="showMessage"></alert>
-        <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Book</button>
+        <button type="button" class="btn btn-success btn-sm" v-b-modal.address-modal>Add Address</button>
         <br><br>
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Author</th>
-              <th scope="col">Read?</th>
+              <th scope="col">Address</th>
+              <th scope="col">Name</th>
+              <th scope="col">Visited?</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(book, index) in books" :key="index">
-              <td>{{ book.title }}</td>
-              <td>{{ book.author }}</td>
+            <tr v-for="(address, index) in addresss" :key="index">
+              <td>{{ address.address }}</td>
+              <td>{{ address.name }}</td>
               <td>
-                <span v-if="book.read">Yes</span>
+                <span v-if="address.read">Yes</span>
                 <span v-else>No</span>
               </td>
               <td>
@@ -29,14 +29,14 @@
                   <button
                           type="button"
                           class="btn btn-warning btn-sm"
-                          v-b-modal.book-update-modal
-                          @click="editBook(book)">
+                          v-b-modal.address-update-modal
+                          @click="editAddress(address)">
                       Update
                   </button>
                   <button
                           type="button"
                           class="btn btn-danger btn-sm"
-                          @click="onDeleteBook(book)">
+                          @click="onDeleteAddress(address)">
                       Delete
                   </button>
                 </div>
@@ -46,34 +46,34 @@
         </table>
       </div>
     </div>
-    <b-modal ref="addBookModal"
-            id="book-modal"
-            title="Add a new book"
+    <b-modal ref="addAddressModal"
+            id="address-modal"
+            address="Add a new address"
             hide-footer>
       <b-form @submit="onSubmit" @reset="onReset" class="w-100">
-      <b-form-group id="form-title-group"
+      <b-form-group id="form-address-group"
                     label="Title:"
-                    label-for="form-title-input">
-          <b-form-input id="form-title-input"
+                    label-for="form-address-input">
+          <b-form-input id="form-address-input"
                         type="text"
-                        v-model="addBookForm.title"
+                        v-model="addAddressForm.address"
                         required
-                        placeholder="Enter title">
+                        placeholder="Enter address">
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-author-group"
+        <b-form-group id="form-name-group"
                       label="Author:"
-                      label-for="form-author-input">
-            <b-form-input id="form-author-input"
+                      label-for="form-name-input">
+            <b-form-input id="form-name-input"
                           type="text"
-                          v-model="addBookForm.author"
+                          v-model="addAddressForm.name"
                           required
-                          placeholder="Enter author">
+                          placeholder="Enter name">
             </b-form-input>
           </b-form-group>
         <b-form-group id="form-read-group">
-          <b-form-checkbox-group v-model="addBookForm.read" id="form-checks">
-            <b-form-checkbox value="true">Read?</b-form-checkbox>
+          <b-form-checkbox-group v-model="addAddressForm.read" id="form-checks">
+            <b-form-checkbox value="true">Visited?</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
         <b-button-group>
@@ -82,34 +82,34 @@
         </b-button-group>
       </b-form>
     </b-modal>
-    <b-modal ref="editBookModal"
-            id="book-update-modal"
-            title="Update"
+    <b-modal ref="editAddressModal"
+            id="address-update-modal"
+            address="Update"
             hide-footer>
       <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
-      <b-form-group id="form-title-edit-group"
+      <b-form-group id="form-address-edit-group"
                     label="Title:"
-                    label-for="form-title-edit-input">
-          <b-form-input id="form-title-edit-input"
+                    label-for="form-address-edit-input">
+          <b-form-input id="form-address-edit-input"
                         type="text"
-                        v-model="editForm.title"
+                        v-model="editForm.address"
                         required
-                        placeholder="Enter title">
+                        placeholder="Enter address">
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-author-edit-group"
+        <b-form-group id="form-name-edit-group"
                       label="Author:"
-                      label-for="form-author-edit-input">
-            <b-form-input id="form-author-edit-input"
+                      label-for="form-name-edit-input">
+            <b-form-input id="form-name-edit-input"
                           type="text"
-                          v-model="editForm.author"
+                          v-model="editForm.name"
                           required
-                          placeholder="Enter author">
+                          placeholder="Enter name">
             </b-form-input>
           </b-form-group>
         <b-form-group id="form-read-edit-group">
           <b-form-checkbox-group v-model="editForm.read" id="form-checks">
-            <b-form-checkbox value="true">Read?</b-form-checkbox>
+            <b-form-checkbox value="true">Visited?</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
         <b-button-group>
@@ -128,18 +128,18 @@ import Alert from './Alert.vue';
 export default {
   data() {
     return {
-      books: [],
-      addBookForm: {
-        title: '',
-        author: '',
+      addresss: [],
+      addAddressForm: {
+        address: '',
+        name: '',
         read: [],
       },
       message: '',
       showMessage: false,
       editForm: {
         id: '',
-        title: '',
-        author: '',
+        address: '',
+        name: '',
         read: [],
       },
     };
@@ -148,113 +148,113 @@ export default {
     alert: Alert,
   },
   methods: {
-    getBooks() {
-      const path = 'http://localhost:5000/books';
+    getAddresss() {
+      const path = 'http://localhost:5000/addresss';
       axios.get(path)
         .then((res) => {
-          this.books = res.data.books;
+          this.addresss = res.data.addresss;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
     },
-    addBook(payload) {
-      const path = 'http://localhost:5000/books';
+    addAddress(payload) {
+      const path = 'http://localhost:5000/addresss';
       axios.post(path, payload)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book added!';
+          this.getAddresss();
+          this.message = 'Address added!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
-          this.getBooks();
+          this.getAddresss();
         });
     },
     initForm() {
-      this.addBookForm.title = '';
-      this.addBookForm.author = '';
-      this.addBookForm.read = [];
+      this.addAddressForm.address = '';
+      this.addAddressForm.name = '';
+      this.addAddressForm.read = [];
       this.editForm.id = '';
-      this.editForm.title = '';
-      this.editForm.author = '';
+      this.editForm.address = '';
+      this.editForm.name = '';
       this.editForm.read = [];
     },
     onSubmit(evt) {
       evt.preventDefault();
-      this.$refs.addBookModal.hide();
+      this.$refs.addAddressModal.hide();
       let read = false;
-      if (this.addBookForm.read[0]) read = true;
+      if (this.addAddressForm.read[0]) read = true;
       const payload = {
-        title: this.addBookForm.title,
-        author: this.addBookForm.author,
+        address: this.addAddressForm.address,
+        name: this.addAddressForm.name,
         read, // property shorthand
       };
-      this.addBook(payload);
+      this.addAddress(payload);
       this.initForm();
     },
     onReset(evt) {
       evt.preventDefault();
-      this.$refs.addBookModal.hide();
+      this.$refs.addAddressModal.hide();
       this.initForm();
     },
-    editBook(book) {
-      this.editForm = book;
+    editAddress(address) {
+      this.editForm = address;
     },
     onSubmitUpdate(evt) {
       evt.preventDefault();
-      this.$refs.editBookModal.hide();
+      this.$refs.editAddressModal.hide();
       let read = false;
       if (this.editForm.read[0]) read = true;
       const payload = {
-        title: this.editForm.title,
-        author: this.editForm.author,
+        address: this.editForm.address,
+        name: this.editForm.name,
         read,
       };
-      this.updateBook(payload, this.editForm.id);
+      this.updateAddress(payload, this.editForm.id);
     },
-    updateBook(payload, bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+    updateAddress(payload, addressID) {
+      const path = `http://localhost:5000/addresss/${addressID}`;
       axios.put(path, payload)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book updated!';
+          this.getAddresss();
+          this.message = 'Address updated!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getAddresss();
         });
     },
     onResetUpdate(evt) {
       evt.preventDefault();
-      this.$refs.editBookModal.hide();
+      this.$refs.editAddressModal.hide();
       this.initForm();
-      this.getBooks(); // why?
+      this.getAddresss(); // why?
     },
-    removeBook(bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+    removeAddress(addressID) {
+      const path = `http://localhost:5000/addresss/${addressID}`;
       axios.delete(path)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book removed!';
+          this.getAddresss();
+          this.message = 'Address removed!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getAddresss();
         });
     },
-    onDeleteBook(book) {
-      this.removeBook(book.id);
+    onDeleteAddress(address) {
+      this.removeAddress(address.id);
     },
   },
   created() {
-    this.getBooks();
+    this.getAddresss();
   },
 };
 </script>

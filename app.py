@@ -3,23 +3,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
-BOOKS = [
+ADDRESS = [
     {
         'id': uuid.uuid4().hex,
-        'title': 'On the Road',
-        'author': 'Jack Kerouac',
-        'read': True
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Harry Potter and the Philosopher\'s Stone',
-        'author': 'J. K. Rowling',
-        'read': False
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Green Eggs and Ham',
-        'author': 'Dr. Seuss',
+        'address': '123 PLACE RD',
+        'name': 'Jack Kerouac',
         'read': True
     }
 ]
@@ -42,46 +30,46 @@ def ping_pong():
     return jsonify('pong!')
 
 
-def remove_book(book_id):
-    for book in BOOKS:
-        if book['id'] == book_id:
-            BOOKS.remove(book)
+def remove_address(address_id):
+    for address in ADDRESS:
+        if address['id'] == address_id:
+            ADDRESS.remove(address)
             return True
     return False
 
 
-@app.route('/books', methods=['GET', 'POST'])
-def all_books():
+@app.route('/addresss', methods=['GET', 'POST'])
+def all_addresss():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        BOOKS.append({
+        ADDRESS.append({
             'id': uuid.uuid4().hex,
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
+            'address': post_data.get('address'),
+            'name': post_data.get('name'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Book added!'
     else:
-        response_object['books'] = BOOKS
+        response_object['addresss'] = ADDRESS
     return jsonify(response_object)
 
 
-@app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
-def single_book(book_id):
+@app.route('/addresss/<address_id>', methods=['PUT', 'DELETE'])
+def single_address(address_id):
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()
-        remove_book(book_id)
-        BOOKS.append({
+        remove_address(address_id)
+        ADDRESS.append({
             'id': uuid.uuid4().hex,
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
+            'address': post_data.get('address'),
+            'name': post_data.get('name'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Book updated!'
     if request.method == 'DELETE':
-        remove_book(book_id)
+        remove_address(address_id)
         response_object['message'] = 'Book removed!'
     return jsonify(response_object)
 
