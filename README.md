@@ -1,4 +1,10 @@
 # address_bookcrud
 
 For Front End
-CD client 
+`cd client`
+`npm install`
+
+Back End 
+`pipenv install`
+`pipenv shell`
+`python app.py` 
